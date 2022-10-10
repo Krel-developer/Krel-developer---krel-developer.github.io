@@ -51,7 +51,7 @@ contract KrelFunding {
     modifier over(uint256 _index) {
         require(
             projects[_index].endAt < block.timestamp,
-            "Campaign isn't over yet"
+            "Funding isn't over yet"
         );
         _;
     }
@@ -95,6 +95,7 @@ contract KrelFunding {
     function donateForProject(uint256 _index, uint256 _amount) public payable {
         require(_amount >= 1 ether, "You need to donate at least one CUSD");
         Project storage currentProject = projects[_index];
+        require(currentProject.endAt > block.timestamp,"Funding is over");
         require(
             msg.sender != currentProject.owner,
             "You cannot donate to your own project"
