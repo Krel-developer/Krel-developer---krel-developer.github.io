@@ -11,7 +11,7 @@ This is a very simple crowdfunding dapp where users can:
 
 ## Live Demo
 
-[KrelFunding Dapp](https://krel-developer.github.io/)
+[KrelFunding Dapp](https://krel-developer.github.io/Krel-developer---krel-developer.github.io/)
 
 ## Usage
 
