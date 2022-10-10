@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KrelFunding</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+    <style>
+      section {
+        margin: 20px 0;
+      }
+
+      .modal img {
+        width: 100%;
+      }
+      .owner {
+        margin: 20px 0;
+      }
+      @media (min-width: 576px) {
+        .card-image {
+          width: 100%;
+          height: 20vw;
+          max-height: 270px;
+          object-fit: cover;
+          overflow: hidden;
+        }
+      }
+      .goal {
+        margin-bottom: 20px;
+      }
+      .progress-bar {
+        width: 100%;
+        background: #e3e3e3;
+        max-width: 300px;
+      }
+      .progress-bar span {
+        display: block;
+        height: 4px;
+        background: #ee6e73;
+      }
+      .current-value {
+        font-size: 20px;
+        color: #ee6e73;
+      }
+      #modal-form input,
+      #modal-form textarea {
+        margin-bottom: 15px;
+      }
+      #modal-form textarea {
+        margin-top: 15px;
+        height: 150px;
+        padding: 10px;
+      }
+      .notice {
+        width: 100%;
+        position: fixed;
+        z-index: 9999999999;
+        background: #fff;
+        bottom: 10px;
+        right: 20px;
+        max-width: 500px;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%),
+          0 3px 1px -2px rgb(0 0 0 / 12%), 0 1px 5px 0 rgb(0 0 0 / 20%);
+      }
+      .notice .progress {
+        margin-bottom: -5px;
+      }
+      .notice-close {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        font-size: 20px;
+        padding: 10px;
+        cursor: pointer;
+        line-height: 0;
+      }
+      .tabs {
+        margin-bottom: 30px;
+      }
+      #my-project-wrapper {
+        margin-top: 20px;
+      }
+      #modal-about input {
+        max-width: 300px;
+        display: block;
+      }
+      .donate-block {
+        padding-top: 20px;
+        margin-top: 20px;
+        border-top: 1px solid rgba(160, 160, 160, 0.2);
+      }
+      .preloader {
+        padding-top: 120px;
+        padding-bottom: 40px;
+        text-align: center;
+        display: none;
+      }
+      .loading .preloader {
+        display: block;
+      }
+      .loading #project,
+      .loading #myproject {
+        display: none;
+      }
+      #myproject .card-action {
+        height: 114px;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav>
+      <div class="nav-wrapper container">
+        <a href="#" class="brand-logo">KrelFunding </a>
+        <div class="right hide-on-med-and-down">
+          <span class="balance">0</span> cUSD
+        </div>
+      </div>
+    </nav>
+    <section class="main loading">
+      <div class="container">
+        <div class="row">
+          <div class="col s12">
+            <ul class="tabs">
+              <li class="tab col s6">
+                <a class="active" href="#project">Projects</a>
+              </li>
+              <li class="tab col s6">
+                <a href="#myproject">My projects</a>
+              </li>
+            </ul>
+          </div>
+          <div class="preloader col-12">
+            <div class="preloader-wrapper big active">
+              <div class="spinner-layer spinner-green-only">
+                <div class="circle-clipper left">
+                  <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                  <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                  <div class="circle"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="project" class="col s12">
+            <div class="row" id="project-wrapper"></div>
+          </div>
+          <div id="myproject" class="col s12">
+            <a href="#modal-form" class="modal-trigger btn"> new project</a>
+            <div class="row" id="my-project-wrapper"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div id="modal-about" class="modal">
+      <div class="modal-content"></div>
+      <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">
+          Close
+        </a>
+      </div>
+    </div>
+
+    <div id="modal-form" class="modal">
+      <div class="modal-content">
+        <h4>Add new project</h4>
+        <form action="">
+          <strong>Name of project</strong>
+
+          <input type="text" id="projectName" />
+
+          <strong>Img url</strong>
+
+          <input type="text" id="projectImgUrl" />
+
+          <strong>Amount of cUSD for goal</strong>
+
+          <input type="number" id="projectGoal" />
+
+          <strong> Description</strong>
+
+          <textarea id="projectDescription"></textarea>
+          <div class="btn">Add project</div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">
+          Close
+        </a>
+      </div>
+    </div>
+    <div class="notice" style="display: none">
+      <div class="notice-close">&times;</div>
+      <div class="notice-text"></div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  </body>
+</html>
