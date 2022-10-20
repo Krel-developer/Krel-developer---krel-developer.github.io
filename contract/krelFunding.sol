@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT
+import "@openzeppelin/contracts/utils/Counters.sol";
 
 pragma solidity >=0.7.0 <0.9.0;
 
@@ -15,8 +16,9 @@ interface IERC20Token {
 }
 
 contract KrelFunding  {
+    using Counters for Counters.Counter; 
+    Counters.Counter projectsLength;
 
-    uint internal projectsLength = 0;
     address internal cUsdTokenAddress = 0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1;
 
     struct Project {
@@ -42,7 +44,7 @@ contract KrelFunding  {
         string memory _description, 
         uint _goal
     ) public {
-        projects[projectsLength] = Project(
+        projects[projectsLength.current()] = Project(
             payable(msg.sender),
             _name,
             _img,
@@ -51,7 +53,7 @@ contract KrelFunding  {
             0,
             false
         );
-        projectsLength++;
+        projectsLength.increment();
     }
 
     function donateForProject(uint _index, uint _amount) public payable  isEnded(_index){
@@ -104,7 +106,7 @@ contract KrelFunding  {
     }
 
     function getProjectsLength() public view returns (uint) {
-        return (projectsLength);
+        return (projectsLength.current());
     }
 
     receive() external payable {
