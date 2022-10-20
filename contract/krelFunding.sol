@@ -26,10 +26,15 @@ contract KrelFunding  {
         string description;
         uint goal;
         uint current;
-        bool isWithdraw;
+        bool isEnded;
     }
 
     mapping (uint => Project) internal projects;
+
+    modifier isEnded(uint _index){
+        require(projects[_index].isEnded == false,  "campaign ended");
+        _;
+    }
 
     function createProject (
         string memory _name,
@@ -37,18 +42,45 @@ contract KrelFunding  {
         string memory _description, 
         uint _goal
     ) public {
-        bool _isWithdraw = false;
-        uint _current = 0;
         projects[projectsLength] = Project(
             payable(msg.sender),
             _name,
             _img,
             _description,
             _goal,
-            _current,
-            _isWithdraw
+            0,
+            false
         );
         projectsLength++;
+    }
+
+    function donateForProject(uint _index, uint _amount) public payable  isEnded(_index){
+        require(msg.sender != projects[_index].owner, "owner cannot donate");
+        require(
+            IERC20Token(cUsdTokenAddress).transferFrom(
+                msg.sender, 
+                address(this), 
+                _amount
+            ),
+          "Transfer failed."
+        );
+        projects[_index].current += _amount;
+ 
+    }
+
+    function withdraw (uint _index) public payable  isEnded(_index){
+        require(msg.sender ==projects[_index].owner,  "Only owner can withdraw.");
+        require(projects[_index].current >= projects[_index].goal,  "goal not reached");
+
+        projects[_index].isEnded = true;
+
+        require(
+            IERC20Token(cUsdTokenAddress).transfer(
+                projects[_index].owner, 
+                projects[_index].current
+            ),
+          "Transfer failed."
+        );
     }
 
     function readProject(uint _index) public view returns (
@@ -67,37 +99,10 @@ contract KrelFunding  {
             projects[_index].description, 
             projects[_index].goal, 
             projects[_index].current,
-            projects[_index].isWithdraw
+            projects[_index].isEnded
         );
     }
 
-    function donateForProject(uint _index, uint _amount) public payable  {
-        require(msg.sender != projects[_index].owner, "You cannot donate to your own project");
-        require(
-            IERC20Token(cUsdTokenAddress).transferFrom(
-                msg.sender, 
-                address(this), 
-                _amount
-            ),
-          "Transfer failed."
-        );
-        projects[_index].current = projects[_index].current + _amount;
- 
-    }
-    function withdraw (uint _index) public payable  {
-        require(msg.sender ==projects[_index].owner,  "Only owner can wihdraw.");
-        require(projects[_index].current >= projects[_index].goal,  "You cannot withdraw until the goal is reached.");
-        require(projects[_index].isWithdraw == false,  "You already withdraw.");
-        require(
-            IERC20Token(cUsdTokenAddress).transfer(
-                projects[_index].owner, 
-                projects[_index].current
-            ),
-          "Transfer failed."
-        );
-        projects[_index].isWithdraw = true;
-
-    }
     function getProjectsLength() public view returns (uint) {
         return (projectsLength);
     }
